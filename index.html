@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+
+		<style>
+			html {
+				/*-webkit-app-region: drag;*/
+			}
+			html, body {
+				margin: 0;
+				border: 0;
+				padding: 0;
+				font-family: sans-serif;;
+			}
+
+			body {
+				height: auto;
+				width: auto;
+				overflow: visible;
+			}
+
+			h1 {
+				text-align: center;
+				font-size: 140%;
+			}
+
+			.opaque {
+				background-color: rgb(51,102,102);
+			}
+
+			#start {
+				width: 100px;
+				margin-left: auto;
+				margin-right: auto;
+				text-align: center;
+			}
+
+			.text-center {
+				text-align: center;
+			}
+
+			.details {
+				padding: 20px;
+			}
+
+			#innerPage {
+				display: none;
+			}
+
+			input {
+				padding: 0px;
+				margin: 0px;
+				border: 0px;
+			}
+
+			.navBar {
+				position: absolute;
+				top: 0;
+				left: 0;
+				height: 40px;
+				background-color: #b3b3b3;
+				padding: 5px;
+				width: 100%;
+			}
+
+			.history-btn {
+				width: 20px;
+				height: 25px;
+				border-radius: 7px;
+				font-size: 130%;
+				background-color: white;
+				display: inline-block;
+				text-align: center;
+				margin-top: 5px;
+				cursor: pointer;
+			}
+
+			.address-bar {
+				position: absolute;
+				top: 20px;
+				left: 59px;
+				width: 75%;
+				margin-top: -10px;
+			}
+
+			.current-page {
+				width: 100%;
+				padding: 4px;
+			}
+
+			webview {
+				top: 40px;
+				position: absolute;
+			}
+		</style>
+  </head>
+  <body class="opaque">
+		<div id="innerPage">
+			<div class="navBar"><div class="history-back history-btn">&lt;</div> <div class="history-forward history-btn">&gt;</div> <div class="address-bar"><input type="text" class="current-page" /></div></div>
+		</div>
+
+
+		<div id="content">
+			<h1>
+				hydrogen-window
+			</h1>
+			<div class="details">
+				hydrogen-window has finished loading. Click go to begin browsing like a normal web browser. You know the short cuts ;)
+				<br />
+				<br />
+				<div class="text-center">
+					<button class="start" data-link="https://plex.tv/web/app">Plex</button>
+					<button class="start" data-link="https://youtube.com">YouTube</button>
+					<button class="start" data-link="https://netflix.com">Netflix</button>
+					<button class="start" data-link="https://google.com">Google</button>
+				</div>
+			</div>
+		</div>
+
+		<!-- drag fix? -->
+		<div style="-webkit-app-region: no-drag;"></div>
+
+
+		<script>
+	    // You can also require other files to run in this process
+	    require('./renderer.js')
+	  </script>
+</html>
