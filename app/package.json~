@@ -1,9 +1,11 @@
 {
   "name": "hydrogen-window",
-  "author": "josh@grantj.io",
   "version": "0.0.1",
   "description": "A cross-platform floating media window",
   "main": "main.js",
+  "scripts": {
+    "start": "electron ."
+  },
   "keywords": [
     "Electron",
     "hydrogen",
@@ -15,21 +17,8 @@
     "click-through",
     "on-top"
   ],
-  "license": "CC0-1.0",
-  "devDependencies": {
-    "electron": "^1.3.4",
-    "electron-builder": "^6.4.0"
-  },
+  "license": "Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International Public License",
   "dependencies": {
-    "electron-squirrel-startup": "^1.0.0",
     "jquery": "^3.1.0"
-  },
-  "build": {
-    "appId": "uk.grantj.hydrogen"
-  },
-  "scripts": {
-    "pack": "build --dir",
-    "dist": "build",
-    "start": "electron app"
   }
 }

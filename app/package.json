@@ -24,12 +24,7 @@
     "electron-squirrel-startup": "^1.0.0",
     "jquery": "^3.1.0"
   },
-  "build": {
-    "appId": "uk.grantj.hydrogen"
-  },
-  "scripts": {
-    "pack": "build --dir",
-    "dist": "build",
+	"scripts": {
     "start": "electron app"
   }
 }
