@@ -5,6 +5,7 @@ const globalShortcut = electron.globalShortcut;
 const BrowserWindow = electron.BrowserWindow;
 const Menu = electron.Menu;
 const ipcMain = electron.ipcMain;
+var screen = null;
 
 // this should be placed at top of main.js to handle setup events quickly
 if (handleSquirrelEvent()) {
@@ -78,10 +79,12 @@ function handleSquirrelEvent() {
 // be closed automatically when the JavaScript object is garbage collected.
 let mainWindow;
 var clickable = true;
-var draggable = false;
 var minimode = false;
+var tickTimer = false;
+var fadeDistance = [20, 200];
 
 function setupApp() {
+	screen = electron.screen;
 	registerGlobalShortcuts();
 	buildMenu();
 	createWindow();
@@ -105,6 +108,29 @@ function setupApp() {
 	});
 }
 
+function distanceApart(p) {
+	var rect = mainWindow.getBounds();
+	rect.min = {x: rect.x, y: rect.y};
+	rect.max = {x: rect.x + rect.width, y: rect.y + rect.height};
+
+	var dx = Math.max(rect.min.x - p.x, 0, p.x - rect.max.x);
+  var dy = Math.max(rect.min.y - p.y, 0, p.y - rect.max.y);
+  return Math.sqrt(dx*dx + dy*dy);
+}
+
+function tick() {
+	if (!clickable && minimode && mainWindow && mainWindow.isVisible()) {
+		// console.log(screen.getCursorScreenPoint());
+		// console.log(location);
+		var d = distanceApart(screen.getCursorScreenPoint());
+		if (d <= fadeDistance[1]) {
+			var o = ((d - fadeDistance[0]) / (fadeDistance[1] - fadeDistance[0]));
+			console.log(d+": "+o);
+			mainWindow.webContents.send('opacity', o);
+		}
+	}
+}
+
 function createWindow () {
 	// Create the browser window.
 	mainWindow = new BrowserWindow({width: 570, height: 320, frame: false, transparent: true, alwaysOnTop: true, focusable: true, show: false, fullscreenable: false});
@@ -124,6 +150,7 @@ function createWindow () {
 
 	mainWindow.once('ready-to-show', function() {
 		mainWindow.show();
+		tickTimer = setInterval(tick, 50);
 	});
 }
 
@@ -148,35 +175,7 @@ function buildMenu() {
 					accelerator: 'CommandOrControl+M',
 					click(item, focusedWindow) {
 						clickable = !clickable;
-
-						// if window is clickable, it should not be draggable
-						if (clickable) {
-							draggable = false
-							focusedWindow.webContents.send("draggable", draggable);
-						}
 						mainWindow.setIgnoreMouseEvents(!clickable);
-					}
-				},
-				{
-					accelerator: 'CommandOrControl+D',
-					click(item, focusedWindow) {
-						draggable = !draggable;
-
-						// if window is draggable, the window must accept mouse events
-						if (draggable) {
-							clickable = true;
-							mainWindow.setIgnoreMouseEvents(!clickable);
-						}
-						focusedWindow.webContents.send("draggable", draggable);
-
-						var bounds = focusedWindow.getBounds();
-						bounds['width'] += 1;
-						bounds['height'] += 1;
-						focusedWindow.setBounds(bounds);
-
-						bounds['width'] -= 1;
-						bounds['height'] -= 1;
-						focusedWindow.setBounds(bounds);
 					}
 				},
 				{

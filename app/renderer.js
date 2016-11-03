@@ -4,14 +4,15 @@ var ipcRenderer = require("electron").ipcRenderer;
 ipcRenderer.on('opacity', (event, arg) => {
 		var opacity = parseFloat($("body").css("opacity"));
 
-		console.log(opacity);
 		if (arg == '-') {
 			opacity -= 0.1;
 		}
-		else {
+		else if (arg == '+') {
 			opacity += 0.1;
 		}
-		console.log(opacity);
+		else {
+			opacity = arg;
+		}
 
 		if (opacity < 0) {
 			opacity = 0;
@@ -23,11 +24,14 @@ ipcRenderer.on('opacity', (event, arg) => {
 		$("body").css("opacity", opacity);
 	});
 	ipcRenderer.on('draggable', (event, arg) => {
+			return;
 			if (arg == true) {
-				$("html,webview").css("-webkit-app-region", "drag");
+				$("html,.navBar").css("-webkit-app-region", "drag");
+				$("html,.navBar").css('cursor', 'move');
 			}
 			else {
-				$("html,webview").css("-webkit-app-region", "no-drag");
+				$("html,.navBar").css("-webkit-app-region", "no-drag");
+				$("html,.navBar").css('cursor', 'auto');
 			}
 	});
 	ipcRenderer.on('navbar', (event, arg) => {
@@ -43,7 +47,7 @@ $(document).ready(function() {
 	var resize = function() {
 		$(".navBar").width($(window).width()-10);
 		$("webview").width($(window).width());
-		$("webview").height($(window).height()-45);
+		$("webview").height($(window).height()-105);
 	};
 
 	var start = function(url) {
