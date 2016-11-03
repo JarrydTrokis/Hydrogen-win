@@ -1,17 +1,25 @@
 var $ = require("jquery");
 var ipcRenderer = require("electron").ipcRenderer;
+var original_opacity = 1;
 
 ipcRenderer.on('opacity', (event, arg) => {
 		var opacity = parseFloat($("body").css("opacity"));
 
 		if (arg == '-') {
 			opacity -= 0.1;
+			original_opacity = opacity;
 		}
 		else if (arg == '+') {
 			opacity += 0.1;
+			original_opacity = opacity;
+		}
+		else if (arg == 'r') {
+			opacity = original_opacity;
 		}
 		else {
-			opacity = arg;
+			if (arg < original_opacity) {
+				opacity = arg;
+			}
 		}
 
 		if (opacity < 0) {
@@ -35,6 +43,7 @@ ipcRenderer.on('opacity', (event, arg) => {
 			}
 	});
 	ipcRenderer.on('navbar', (event, arg) => {
+		return;
 			if (arg == 'hide') {
 				$(".navBar").hide();
 			}
@@ -47,7 +56,7 @@ $(document).ready(function() {
 	var resize = function() {
 		$(".navBar").width($(window).width()-10);
 		$("webview").width($(window).width());
-		$("webview").height($(window).height()-105);
+		$("webview").height($(window).height());
 	};
 
 	var start = function(url) {

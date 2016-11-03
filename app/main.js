@@ -81,7 +81,7 @@ let mainWindow;
 var clickable = true;
 var minimode = false;
 var tickTimer = false;
-var fadeDistance = [20, 200];
+var fadeDistance = [0, 75];
 
 function setupApp() {
 	screen = electron.screen;
@@ -125,9 +125,11 @@ function tick() {
 		var d = distanceApart(screen.getCursorScreenPoint());
 		if (d <= fadeDistance[1]) {
 			var o = ((d - fadeDistance[0]) / (fadeDistance[1] - fadeDistance[0]));
-			console.log(d+": "+o);
 			mainWindow.webContents.send('opacity', o);
 		}
+    else {
+      mainWindow.webContents.send('opacity', 'r');
+    }
 	}
 }
 
@@ -176,6 +178,14 @@ function buildMenu() {
 					click(item, focusedWindow) {
 						clickable = !clickable;
 						mainWindow.setIgnoreMouseEvents(!clickable);
+            if (clickable) {
+              focusedWindow.webContents.send('opacity', '100');
+              focusedWindow.setHasShadow(true);
+            }
+            else {
+              focusedWindow.setHasShadow(false);
+            }
+            console.log("clickable: "+clickable);
 					}
 				},
 				{
@@ -185,7 +195,7 @@ function buildMenu() {
 					}
 				},
 				{
-					accelerator: 'CommandOrControl+space',
+					accelerator: 'CommandOrControl+F',
 					click(item, focusedWindow) {
 						minimode = !minimode;
 						if (minimode) {
